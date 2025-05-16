@@ -1,0 +1,37 @@
+{
+  "name": "ai-devs-tasks",
+  "version": "1.0.0",
+  "description": "AI Devs Tasks",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "tsx tasks/${npm_config_dir:-.}/index.ts",
+    "dev": "tsx watch tasks/${npm_config_dir:-.}/index.ts",
+    "build": "tsc",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^20.11.19",
+    "axios": "^1.9.0",
+    "dotenv": "^16.5.0",
+    "langfuse": "^3.37.2",
+    "openai": "^4.98.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "eslint": "^9.26.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.0",
+    "prettier": "^3.5.3",
+    "tsx": "^4.19.4"
+  }
+}

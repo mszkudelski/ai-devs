@@ -1,8 +1,8 @@
 import sharp from 'sharp';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { processImage } from '../../src/vision.js';
-import { getChatResponse } from '../../src/response.js';
+import { processImage } from '../../src/legacy/vision.js';
+import { getChatResponse } from '../../src/legacy/response.js';
 
 // Fix for __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);

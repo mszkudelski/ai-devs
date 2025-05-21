@@ -1,4 +1,4 @@
-import { getChatResponse } from "../../src/response.js";
+import { getChatResponse } from "../../src/legacy/response.js";
 import { readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { sendReport } from "../../src/report.js";

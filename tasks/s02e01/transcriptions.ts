@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { getTranscription } from '../../src/transcription.js';
+import { getTranscription } from '../../src/legacy/transcription.js';
 
 const AUDIO_DIR = 'tasks/s02e01/data/przesluchania';
 const TRANSCRIPTIONS_DIR = 'tasks/s02e01/data/transcriptions';

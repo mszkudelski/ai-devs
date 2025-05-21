@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { exec } from "child_process";
 import { writeFile } from 'fs/promises';
 import { promisify } from 'util';
-import { getChatResponse } from "../../src/response.js";
+import { getChatResponse } from "../../src/legacy/response.js";
 
 // Convert exec to promise-based
 const execAsync = promisify(exec); 

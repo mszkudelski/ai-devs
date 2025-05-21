@@ -1,6 +1,6 @@
 import { getRequest } from "../../src/api.js";
 import { sendReport } from "../../src/report.js";
-import { getChatResponse } from "../../src/response.js";
+import { getChatResponse } from "../../src/legacy/response.js";
 import { getCentralUrl } from "../../src/url.js";
 
 // const data = `Dane podejrzanego: Jakub Woźniak. Adres: Rzeszów, ul. Miła 4. Wiek: 33 lata.`;

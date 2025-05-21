@@ -1,4 +1,4 @@
-import { getChatResponse } from "../../src/response.js";
+import { getChatResponse } from "../../src/legacy/response.js";
 
 const dataUrl = `https://xyz.${process.env.DOMAIN}/files/0_13_4b.txt`
 const verificationUrl = `https://xyz.${process.env.DOMAIN}/verify`;

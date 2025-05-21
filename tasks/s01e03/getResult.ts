@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
-import { getChatResponse } from '../../src/response.js';
+import { getChatResponse } from '../../src/legacy/response.js';
 import { reportUrl } from '../../src/url.js';
 
 const __filename = fileURLToPath(import.meta.url);

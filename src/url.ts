@@ -16,3 +16,7 @@ export const getCentralDataUrl = (url: string) => {
 };
 
 export const reportUrl = getCentralUrl('/report');
+
+export const getReportUrl = (taskId: string) => {
+  return reportUrl + '/' + taskId;
+};

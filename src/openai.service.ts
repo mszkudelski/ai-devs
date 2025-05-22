@@ -1,6 +1,8 @@
-import OpenAI from 'openai';
+import OpenAI, { toFile } from "openai";
+import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
+import fs from 'fs/promises';
+import path from 'path';
 import { LangfuseService } from './langfuse.js';
-import fs from 'fs';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -52,6 +54,47 @@ export class OpenAIService {
       });
       throw error;
     }
+  }
+
+  async completion(config: {
+    messages: ChatCompletionMessageParam[],
+    model?: string,
+    stream?: boolean,
+    jsonMode?: boolean,
+    maxTokens?: number
+  }): Promise<OpenAI.Chat.Completions.ChatCompletion> {
+    const { messages, model = "gpt-4", stream = false, jsonMode = false, maxTokens = 8096 } = config;
+    try {
+      const chatCompletion = await this.openai.chat.completions.create({
+        messages,
+        model,
+        stream,
+        max_tokens: maxTokens,
+        response_format: jsonMode ? { type: "json_object" } : { type: "text" }
+      });
+      
+      return chatCompletion;
+    } catch (error) {
+      console.error("Error in OpenAI completion:", error);
+      throw error;
+    }
+  }
+
+  async transcribe(audioFiles: string[], config: { language: string, prompt?: string } = { language: 'pl', prompt: '' }): Promise<{ content: string }[]> {
+    console.log("Transcribing audio files...");
+    const results = await Promise.all(audioFiles.map(async (filePath) => {
+      const buffer = await fs.readFile(filePath);
+      const transcription = await this.openai.audio.transcriptions.create({
+        file: await toFile(buffer, 'speech.mp3'),
+        language: config.language,
+        model: 'whisper-1',
+        prompt: config.prompt,
+      });
+
+      return { content: transcription.text };
+    }));
+
+    return results;
   }
 
   /**
@@ -130,8 +173,9 @@ export class OpenAIService {
       },
       { filePath, model },
       async () => {
+        const buffer = await fs.readFile(filePath);
         const response = await this.openai.audio.transcriptions.create({
-          file: fs.createReadStream(filePath),
+          file: await toFile(buffer, 'speech.mp3'),
           model,
           response_format: "text"
         });
@@ -144,7 +188,7 @@ export class OpenAIService {
   /**
    * Processes an image with GPT-4 Vision
    */
-  async processImage(imagePath: string, prompt: string, model: string = this.defaultChatModel): Promise<string> {
+  async processImage(imagePath: string, prompt?: string, model: string = this.defaultChatModel): Promise<string> {
     return this.withTracing(
       {
         id: `vision-${Date.now()}`,
@@ -153,26 +197,23 @@ export class OpenAIService {
       },
       { imagePath, prompt, model },
       async () => {
-        const base64Image = fs.readFileSync(imagePath, "base64");
+        const buffer = await fs.readFile(imagePath);
+        const base64Image = buffer.toString('base64');
 
-        const response = await this.openai.responses.create({
+        const response = await this.openai.chat.completions.create({
           model,
-          input: [
+          messages: [
             {
               role: "user",
               content: [
-                { type: "input_text", text: prompt },
-                {
-                  type: "input_image",
-                  image_url: `data:image/jpeg;base64,${base64Image}`,
-                  detail: "high"
-                },
+                { type: "text", text: prompt || "Describe the image in detail." },
+                { type: "image_url", image_url: { url: `data:image/jpeg;base64,${base64Image}` } },
               ],
             },
           ],
         });
 
-        return { response: response.output_text };
+        return { response: response.choices[0].message.content || "No description available." };
       }
     ).then(result => result.response);
   }

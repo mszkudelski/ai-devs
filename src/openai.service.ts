@@ -164,16 +164,23 @@ export class OpenAIService {
   /**
    * Transcribes audio from a file
    */
-  async getTranscription(filePath: string, model: string = this.defaultTranscriptionModel): Promise<string> {
+  async getTranscription(filePathOrUrl: string, model: string = this.defaultTranscriptionModel): Promise<string> {
     return this.withTracing(
       {
         id: `transcription-${Date.now()}`,
         name: 'Audio Transcription',
         sessionId: 'default'
       },
-      { filePath, model },
+      { filePathOrUrl, model },
       async () => {
-        const buffer = await fs.readFile(filePath);
+        let buffer: Buffer;
+        if (filePathOrUrl.startsWith('http')) {
+          const response = await fetch(filePathOrUrl);
+          buffer = Buffer.from(await response.arrayBuffer());
+        } else {
+          buffer = await fs.readFile(filePathOrUrl);
+        }
+
         const response = await this.openai.audio.transcriptions.create({
           file: await toFile(buffer, 'speech.mp3'),
           model,
@@ -188,17 +195,24 @@ export class OpenAIService {
   /**
    * Processes an image with GPT-4 Vision
    */
-  async processImage(imagePath: string, prompt?: string, model: string = this.defaultChatModel): Promise<string> {
+  async processImage(imagePathOrUrl: string, prompt?: string, model: string = this.defaultChatModel): Promise<string> {
     return this.withTracing(
       {
         id: `vision-${Date.now()}`,
         name: 'Image Processing',
         sessionId: 'default'
       },
-      { imagePath, prompt, model },
+      { imagePathOrUrl, prompt, model },
       async () => {
-        const buffer = await fs.readFile(imagePath);
-        const base64Image = buffer.toString('base64');
+        let imageUrl: string;
+        
+        if (imagePathOrUrl.startsWith('http')) {
+          imageUrl = imagePathOrUrl;
+        } else {
+          const buffer = await fs.readFile(imagePathOrUrl);
+          const base64Image = buffer.toString('base64');
+          imageUrl = `data:image/jpeg;base64,${base64Image}`;
+        }
 
         const response = await this.openai.chat.completions.create({
           model,
@@ -207,7 +221,7 @@ export class OpenAIService {
               role: "user",
               content: [
                 { type: "text", text: prompt || "Describe the image in detail." },
-                { type: "image_url", image_url: { url: `data:image/jpeg;base64,${base64Image}` } },
+                { type: "image_url", image_url: { url: imageUrl } },
               ],
             },
           ],

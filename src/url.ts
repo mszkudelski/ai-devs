@@ -8,7 +8,7 @@ export const getUrl = (url: string) => {
 };
 
 export const getCentralUrl = (url: string) => {
-  return 'https://c3ntrala.' + process.env.DOMAIN + url;
+  return 'https://c3ntrala.' + process.env.DOMAIN + '/' + url;
 };
 
 export const getCentralDataUrl = (url: string) => {

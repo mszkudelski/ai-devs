@@ -2,9 +2,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-
 export const getUrl = (url: string) => {
-  return 'https://' + process.env.DOMAIN+ url;
+  return 'https://' + process.env.DOMAIN + url;
 };
 
 export const getCentralUrl = (url: string) => {
@@ -12,10 +11,12 @@ export const getCentralUrl = (url: string) => {
 };
 
 export const getCentralDataUrl = (url: string) => {
-  return 'https://c3ntrala.' + process.env.DOMAIN + '/data/' + process.env.AI_DEVS_API_KEY + '/' + url;
+  return (
+    'https://c3ntrala.' + process.env.DOMAIN + '/data/' + process.env.AI_DEVS_API_KEY + '/' + url
+  );
 };
 
-export const reportUrl = getCentralUrl('/report');
+export const reportUrl = getCentralUrl('report');
 
 export const getReportUrl = (taskId: string) => {
   return reportUrl + '/' + taskId;

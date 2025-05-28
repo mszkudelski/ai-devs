@@ -233,9 +233,31 @@ export class OpenAIService {
   }
 
   /**
+   * Creates embeddings for text using OpenAI's embedding model
+   */
+  async createEmbedding(text: string, model: string = "text-embedding-3-large"): Promise<number[]> {
+    return this.withTracing(
+      {
+        id: `embedding-${Date.now()}`,
+        name: 'Create Embedding',
+        sessionId: 'default'
+      },
+      { text, model },
+      async () => {
+        const response = await this.openai.embeddings.create({
+          model,
+          input: text,
+        });
+
+        return { embedding: response.data[0].embedding };
+      }
+    ).then(result => result.embedding);
+  }
+
+  /**
    * Shuts down the Langfuse service
    */
   async shutdown(): Promise<void> {
     await this.langfuseService.shutdownAsync();
   }
-} 
+}

@@ -94,7 +94,7 @@ export class VectorService {
       console.log('All indexes created successfully');
     } catch (error) {
       // Index might already exist, log warning but don't fail
-      console.warn('Warning creating indexes (might already exist):', error.message);
+      console.warn('Warning creating indexes (might already exist):', error instanceof Error ? error.message : String(error));
     }
   }
 

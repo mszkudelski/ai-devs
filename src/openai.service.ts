@@ -71,7 +71,7 @@ export class OpenAIService {
         stream,
         max_tokens: maxTokens,
         response_format: jsonMode ? { type: "json_object" } : { type: "text" }
-      });
+      }) as OpenAI.Chat.Completions.ChatCompletion;
       
       return chatCompletion;
     } catch (error) {
@@ -252,6 +252,28 @@ export class OpenAIService {
         return { embedding: response.data[0].embedding };
       }
     ).then(result => result.embedding);
+  }
+
+  /**
+   * Creates embeddings for multiple texts using OpenAI's embedding model
+   */
+  async createBatchEmbeddings(texts: string[], model: string = "text-embedding-3-large"): Promise<number[][]> {
+    return this.withTracing(
+      {
+        id: `batch-embedding-${Date.now()}`,
+        name: 'Create Batch Embeddings',
+        sessionId: 'default'
+      },
+      { texts: texts.slice(0, 3), model }, // Only log first 3 texts for brevity
+      async () => {
+        const response = await this.openai.embeddings.create({
+          model,
+          input: texts,
+        });
+
+        return { embeddings: response.data.map(item => item.embedding) };
+      }
+    ).then(result => result.embeddings);
   }
 
   /**

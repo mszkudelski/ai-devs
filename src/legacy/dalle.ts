@@ -38,7 +38,7 @@ export const generateImage = async (description: string): Promise<string> => {
     await langfuseService.finalizeTrace(trace, { prompt: description }, { imageUrl });
     return imageUrl;
   } catch (error) {
-    await langfuseService.finalizeTrace(trace, { prompt: description }, { error: error.message });
+    await langfuseService.finalizeTrace(trace, { prompt: description }, { error: error instanceof Error ? error.message : String(error) });
     console.error('Error generating image:', error);
     throw error;
   }

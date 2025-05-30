@@ -18,6 +18,7 @@ export const sendReport = async <T, R = any>(taskName: string, answer: T): Promi
       answer
     };
     
+    console.log('Request:', " POST ", reportUrl, payload);
     const response = await postRequest<typeof payload, R>(reportUrl, payload);
     console.log('Response:', response);
     return response;

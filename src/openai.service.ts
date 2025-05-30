@@ -63,7 +63,7 @@ export class OpenAIService {
     jsonMode?: boolean,
     maxTokens?: number
   }): Promise<OpenAI.Chat.Completions.ChatCompletion> {
-    const { messages, model = "gpt-4", stream = false, jsonMode = false, maxTokens = 8096 } = config;
+    const { messages, model = this.defaultChatModel, stream = false, jsonMode = false, maxTokens = 8096 } = config;
     try {
       const chatCompletion = await this.openai.chat.completions.create({
         messages,
@@ -101,6 +101,12 @@ export class OpenAIService {
    * Generates a chat completion response
    */
   async getChatResponse(prompt: string, model: string = this.defaultChatModel): Promise<string> {
+    // Log the prompt
+    console.log('\n=== OPENAI PROMPT ===');
+    console.log(`Model: ${model}`);
+    console.log('Prompt:');
+    console.log(prompt);
+    
     return this.withTracing(
       {
         id: `chat-${Date.now()}`,
@@ -120,6 +126,14 @@ export class OpenAIService {
         });
 
         const responseText = response.choices[0]?.message?.content || '';
+        
+        // Log the response
+        console.log('\n=== OPENAI RESPONSE ===');
+        console.log(responseText);
+        if (response.usage) {
+          console.log(`\nTokens: ${response.usage.prompt_tokens} prompt + ${response.usage.completion_tokens} completion = ${response.usage.total_tokens} total`);
+        }
+        console.log('======================\n');
         
         return {
           response: responseText,

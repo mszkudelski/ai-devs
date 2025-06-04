@@ -81,15 +81,7 @@ function createAnalysisPrompt(data: string): string {
 Data:
 ${data}
 
-Please use <thinking> tags for analysis, then provide results in <result> tags.
-
-<thinking>
-[Your analysis process]
-</thinking>
-
-<result>
-[Your final answer]
-</result>`;
+Please use <thinking> tags for analysis, then provide results in <result> tags.`;
 }
 ```
 

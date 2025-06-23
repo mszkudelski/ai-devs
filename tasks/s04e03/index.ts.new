@@ -1,0 +1,599 @@
+import { getCentralDataUrl } from "../../src/url.js";
+import { getRequest, postRequest } from "../../src/api.js"; 
+import { sendReport } from "../../src/report.js";
+import { OpenAIService } from "../../src/openai.service.js";
+import { extractFromTags } from "../../src/utils.js";
+import { JSDOM } from 'jsdom';
+
+// Initialize OpenAI Service
+const openaiService = new OpenAIService();
+
+interface SoftoData {
+  "01": string;
+  "02": string;
+  "03": string;
+}
+
+interface ScrapedData {
+  url: string;
+  content: string;
+}
+
+interface Question {
+  id: string;
+  question: string;
+  answer?: string;
+}
+
+/**
+ * Fetches data from the softo.json endpoint
+ * @returns The data from the endpoint
+ */
+async function fetchSoftoData(): Promise<SoftoData> {
+  try {
+    // Using getCentralDataUrl which automatically includes the API key
+    const softoUrl = getCentralDataUrl('softo.json');
+    console.log(`Fetching data from: ${softoUrl}`);
+    
+    const data = await getRequest<any>(softoUrl);
+    console.log('Successfully fetched data');
+    
+    return data;
+  } catch (error) {
+    console.error('Error fetching softo data:', error);
+    throw error;
+  }
+}
+
+/**
+ * Fetches HTML content from a given URL and extracts useful information
+ * @param url The URL to fetch
+ * @returns The scraped data (URL and text content) and HTML content for link extraction
+ */
+async function fetchHtml(url: string): Promise<{data: ScrapedData, html: string}> {
+  try {
+    console.log(`Fetching HTML from: ${url}`);
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
+    }
+    
+    const html = await response.text();
+    const dom = new JSDOM(html);
+    const document = dom.window.document;
+    
+    // Extract text content, removing script and style elements
+    const scripts = document.querySelectorAll('script, style');
+    scripts.forEach(script => script.remove());
+    
+    // Get the cleaned text content
+    const content = document.body.textContent?.trim() || '';
+    
+    console.log(`Successfully fetched HTML from ${url} (${content.length} chars)`);
+    return { 
+      data: { url, content },
+      html 
+    };
+  } catch (error) {
+    console.error(`Error fetching HTML from ${url}:`, error);
+    return { 
+      data: { url, content: '' },
+      html: ''
+    };
+  }
+}
+
+/**
+ * Extracts structured information from HTML content based on common patterns
+ * @param html The HTML content
+ * @param text The text content
+ * @returns Object with various extracted information
+ */
+function extractStructuredInfo(html: string, text: string): Record<string, string[]> {
+  return {
+    emails: extractEmails(html),
+    urls: extractInternalUrls(html),
+    certificates: extractCertificates(text),
+    addresses: extractAddresses(text),
+    phones: extractPhones(text),
+    entities: extractEntities(text)
+  };
+}
+
+/**
+ * Extracts email addresses from HTML content
+ * @param html The HTML content
+ * @returns Array of email addresses
+ */
+function extractEmails(html: string): string[] {
+  // Regular expression for email addresses - catches both mailto: links and text emails
+  const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+  const mailtoRegex = /mailto:([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/gi;
+  
+  const emails = new Set<string>();
+  
+  // Extract plain emails
+  const matches = html.match(emailRegex);
+  if (matches) {
+    matches.forEach(email => emails.add(email));
+  }
+  
+  // Extract mailto links
+  const mailtoMatches = [...html.matchAll(mailtoRegex)];
+  mailtoMatches.forEach(match => {
+    if (match[1]) {
+      emails.add(match[1]);
+    }
+  });
+  
+  return [...emails];
+}
+
+/**
+ * Extracts URLs from HTML content
+ * @param html The HTML content
+ * @returns Array of URLs
+ */
+function extractInternalUrls(html: string): string[] {
+  try {
+    const dom = new JSDOM(html);
+    const document = dom.window.document;
+    const links = document.querySelectorAll('a[href]');
+    
+    return Array.from(links)
+      .map(link => {
+        const href = link.getAttribute('href');
+        const text = link.textContent?.trim();
+        if (!href) return null;
+        
+        // Include the link text as part of the result for better context
+        return { href, text };
+      })
+      .filter((link): link is { href: string, text: string | undefined } => link !== null)
+      .map(link => `${link.href}${link.text ? ` (${link.text})` : ''}`);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Extracts potential certificate information from text
+ * @param text The text content
+ * @returns Array of potential certificate mentions
+ */
+function extractCertificates(text: string): string[] {
+  // Common certificate patterns
+  const patterns = [
+    /ISO\s*\d+[\s:-]*\d+/gi,             // ISO standards like ISO 9001:2015
+    /\bISO\s*\d+\b/gi,                   // Simple ISO numbers
+    /\b(?:ISO|IEC)\s*\d+[^\s,.:;]*/gi,   // ISO/IEC standards
+    /\bCertyfikat\s+[\w\s-]+\d+/gi,      // "Certyfikat" followed by words and numbers
+    /\b(?:certyfikat|certificate)\b[^\.\n]{5,50}/gi  // "certyfikat" with surrounding context
+  ];
+  
+  const results = new Set<string>();
+  for (const pattern of patterns) {
+    const matches = text.match(pattern);
+    if (matches) {
+      matches.forEach(match => results.add(match));
+    }
+  }
+  
+  return [...results];
+}
+
+/**
+ * Extracts potential physical addresses from text
+ * @param text The text content
+ * @returns Array of potential address mentions
+ */
+function extractAddresses(text: string): string[] {
+  // Simple patterns for address-like content
+  const patterns = [
+    /\b(?:ul|ulica|aleja|al)\.\s+[\w\s-]+\s+\d+/gi,  // Street patterns
+    /\d{2}[-\s]?\d{3}\s+[\w\s-]+/gi                  // Postal code patterns
+  ];
+  
+  const results = new Set<string>();
+  for (const pattern of patterns) {
+    const matches = text.match(pattern);
+    if (matches) {
+      matches.forEach(match => results.add(match));
+    }
+  }
+  
+  return [...results];
+}
+
+/**
+ * Extracts potential phone numbers from text
+ * @param text The text content
+ * @returns Array of potential phone numbers
+ */
+function extractPhones(text: string): string[] {
+  // Phone number patterns
+  const patterns = [
+    /(?:\+\d{2}|\(\+\d{2}\))\s*\d{2,3}(?:[\s-]\d{2,3}){2,}/g,  // International format
+    /\d{3}[\s-]?\d{3}[\s-]?\d{3}/g,                            // Standard 9-digit
+    /\d{2}[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}/g                  // Alternative formats
+  ];
+  
+  const results = new Set<string>();
+  for (const pattern of patterns) {
+    const matches = text.match(pattern);
+    if (matches) {
+      matches.forEach(match => results.add(match));
+    }
+  }
+  
+  return [...results];
+}
+
+/**
+ * Extracts potential named entities from text
+ * @param text The text content
+ * @returns Array of potential entity names
+ */
+function extractEntities(text: string): string[] {
+  // Pattern to find capitalized words in sequences (potential company/product names)
+  const entityRegex = /\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\b/g;
+  
+  const matches = [...text.matchAll(entityRegex)];
+  const entities = matches.map(match => match[0]);
+  
+  return [...new Set(entities)];
+}
+
+/**
+ * Extracts all links from HTML content for crawling purposes
+ * @param baseUrl The base URL for resolving relative links
+ * @param html The HTML content
+ * @returns Array of absolute URLs
+ */
+function extractLinks(baseUrl: string, html: string): string[] {
+  try {
+    const dom = new JSDOM(html);
+    const document = dom.window.document;
+    const links = document.querySelectorAll('a[href]');
+    
+    const urls = Array.from(links)
+      .map(link => {
+        const href = link.getAttribute('href');
+        if (!href) return null;
+        
+        // Skip anchor links, javascript, mailto, and tel links
+        if (href.startsWith('#') || 
+            href.startsWith('javascript:') ||
+            href.startsWith('mailto:') || 
+            href.startsWith('tel:')) {
+          return null;
+        }
+        
+        try {
+          // Convert to absolute URL
+          return new URL(href, baseUrl).href;
+        } catch (e) {
+          // Skip invalid URLs
+          return null;
+        }
+      })
+      .filter((url): url is string => url !== null);
+    
+    // Remove duplicates
+    return [...new Set(urls)];
+  } catch (error) {
+    console.error('Error extracting links:', error);
+    return [];
+  }
+}
+
+/**
+ * Creates a prompt for the AI to analyze data and either answer a question or request more pages to scrape
+ * @param question The question to answer
+ * @param scrapedData Array of scraped data from various URLs
+ * @param availableLinks Array of available links that can be scraped next
+ * @returns The formatted prompt for the AI
+ */
+function createAnalysisPrompt(
+  question: string, 
+  scrapedData: ScrapedData[], 
+  availableLinks: string[] = []
+): string {
+  return `You are an AI web agent tasked with finding information from web pages to answer a specific question.
+
+QUESTION: ${question}
+
+Below is the content I've scraped so far from various web pages:
+
+${scrapedData.map((data, index) => `
+SOURCE ${index + 1} (URL: ${data.url}):
+${data.content.substring(0, 1500)}${data.content.length > 1500 ? '... [content truncated]' : ''}
+`).join('\n\n')}
+
+${availableLinks.length > 0 ? `Here are links I found but haven't visited yet:
+${availableLinks.map((url, i) => `${i + 1}. ${url}`).join('\n')}` : 'No additional links available to scrape.'}
+
+INSTRUCTIONS:
+1. If you have enough information to answer the question accurately, respond with:
+<answer>exact answer text</answer>
+
+2. If you DON'T have enough information yet, request to scrape a specific URL by responding with:
+<scrape_url>URL to scrape next</scrape_url>
+
+Important guidelines:
+- Provide ONLY the exact answer, no explanations or additional text
+- If requesting more information, choose the most relevant URL from the list
+- If the answer cannot be found after checking all relevant pages, respond with <answer>Information not found</answer>
+- Be precise - the answer should be explicitly found in the content
+
+Make your decision based solely on the content provided. Have you found the answer, or do you need to scrape another page?
+`;
+}
+
+/**
+ * Analyzes scraped data to either answer a specific question or request more scraping
+ * @param question The question object
+ * @param scrapedData Array of scraped data
+ * @param availableLinks Array of available links that can be scraped next
+ * @returns An object with either the answer or the next URL to scrape
+ */
+async function analyzeAndAnswer(
+  question: Question, 
+  scrapedData: ScrapedData[],
+  availableLinks: string[] = []
+): Promise<{ hasAnswer: boolean; answer?: string; nextUrl?: string }> {
+  console.log(`Analyzing data for question ${question.id}: "${question.question}"`);
+  
+  const prompt = createAnalysisPrompt(question.question, scrapedData, availableLinks);
+  const response = await openaiService.getChatResponse(prompt);
+  
+  // Check if the AI provided an answer
+  const answer = extractFromTags(response, 'answer');
+  if (answer) {
+    console.log(`Answer found for question ${question.id}: ${answer}`);
+    return { hasAnswer: true, answer };
+  }
+  
+  // Check if the AI requested more scraping
+  const nextUrl = extractFromTags(response, 'scrape_url');
+  if (nextUrl) {
+    console.log(`Model requested to scrape URL for question ${question.id}: ${nextUrl}`);
+    return { hasAnswer: false, nextUrl };
+  }
+  
+  // Default case if no answer or URL was extracted
+  console.log(`No clear answer or URL request found. Treating as "Information not found"`);
+  return { hasAnswer: true, answer: "Information not found" };
+}
+
+/**
+ * Web crawler function that uses the model to decide whether to answer questions or crawl more pages
+ * @param startUrl The starting URL for crawling
+ * @param questions Array of questions to answer
+ * @param maxPages Maximum number of pages to crawl (to prevent infinite loops)
+ * @returns Object with answers to questions
+ */
+async function crawlWebsite(startUrl: string, questions: Question[], maxPages: number = 20): Promise<SoftoData> {
+  // Track visited pages and collected data
+  const visited = new Set<string>();
+  const scrapedData: ScrapedData[] = [];
+  const pendingQuestions = [...questions];
+  const answers: SoftoData = {} as SoftoData;
+  
+  // Initialize with the start URL
+  const globalQueue: string[] = [startUrl];
+  
+  console.log(`Starting model-driven web crawl from ${startUrl} to find answers to ${questions.length} questions`);
+  
+  // Continue until we've answered all questions, reached the page limit, or exhausted all links
+  while (pendingQuestions.length > 0 && visited.size < maxPages) {
+    if (globalQueue.length === 0) {
+      console.log("No more URLs to explore. Some questions may remain unanswered.");
+      break;
+    }
+    
+    // Process one question at a time
+    const currentQuestion = pendingQuestions[0];
+    console.log(`Working on question ${currentQuestion.id}: "${currentQuestion.question}"`);
+    
+    // Start with the first page if we haven't visited any yet
+    if (visited.size === 0) {
+      const url = globalQueue.shift()!;
+      await processPage(url);
+    }
+    
+    // Let the model decide what to do for the current question
+    let attempts = 0;
+    const maxAttempts = Math.min(10, maxPages - visited.size); // Limit attempts per question
+    
+    // Available links to explore (all unexplored links)
+    let availableLinks = globalQueue.filter(url => !visited.has(url));
+    
+    // Question-specific agent loop
+    while (attempts < maxAttempts) {
+      const result = await analyzeAndAnswer(currentQuestion, scrapedData, availableLinks);
+      
+      if (result.hasAnswer) {
+        // Store the answer and remove from pending questions
+        answers[currentQuestion.id as keyof SoftoData] = result.answer!;
+        pendingQuestions.shift(); // Remove the current question
+        console.log(`✓ Found answer for question ${currentQuestion.id} (${pendingQuestions.length} questions remaining)`);
+        break;
+      } else if (result.nextUrl) {
+        // The model wants to explore a specific URL
+        const urlToScrape = result.nextUrl;
+        
+        // Check if this URL is valid and not already visited
+        if (!visited.has(urlToScrape)) {
+          console.log(`Model requested to scrape: ${urlToScrape}`);
+          await processPage(urlToScrape);
+          
+          // Update available links after processing the page
+          availableLinks = globalQueue.filter(url => !visited.has(url));
+        } else {
+          console.log(`URL already visited: ${urlToScrape}. Asking model to choose another.`);
+        }
+        
+        attempts++;
+      } else {
+        // Should not reach here if analyzeAndAnswer is implemented correctly
+        console.log("Model response unclear. Moving to next question.");
+        answers[currentQuestion.id as keyof SoftoData] = "Information not found";
+        pendingQuestions.shift();
+        break;
+      }
+      
+      // If we're out of links, move on
+      if (availableLinks.length === 0) {
+        console.log("No more links to explore for this question.");
+        answers[currentQuestion.id as keyof SoftoData] = "Information not found";
+        pendingQuestions.shift();
+        break;
+      }
+    }
+    
+    // If we've reached the maximum attempts for a question, provide default answer and move on
+    if (attempts >= maxAttempts && pendingQuestions[0]?.id === currentQuestion.id) {
+      console.log(`Reached maximum attempts (${maxAttempts}) for question ${currentQuestion.id}. Moving on.`);
+      answers[currentQuestion.id as keyof SoftoData] = "Information not found";
+      pendingQuestions.shift();
+    }
+  }
+  
+  // Log crawling statistics
+  console.log(`Crawling complete. Visited ${visited.size} pages, collected ${scrapedData.length} pages.`);
+  console.log(`Found answers for ${questions.length - pendingQuestions.length}/${questions.length} questions`);
+  
+  // If we still have unanswered questions due to page limit, mark them as not found
+  if (pendingQuestions.length > 0) {
+    console.log(`${pendingQuestions.length} questions remain unanswered due to reaching limits.`);
+    for (const question of pendingQuestions) {
+      answers[question.id as keyof SoftoData] = "Information not found";
+    }
+  }
+  
+  return answers;
+  
+  /**
+   * Helper function to process a single page
+   * @param url URL to process
+   */
+  async function processPage(url: string): Promise<void> {
+    // Skip if already visited
+    if (visited.has(url)) return;
+    
+    // Mark as visited
+    visited.add(url);
+    console.log(`Crawling page ${visited.size}/${maxPages}: ${url}`);
+    
+    try {
+      // Fetch the HTML content
+      const { data, html } = await fetchHtml(url);
+      scrapedData.push(data);
+      
+      // Extract structured information that might be useful for answering questions
+      const structuredInfo = extractStructuredInfo(html, data.content);
+      
+      // Add extracted structured data to the content
+      const hasStructuredData = Object.values(structuredInfo).some(arr => arr.length > 0);
+      if (hasStructuredData) {
+        // Build a formatted string with all structured data
+        let structuredDataContent = `EXTRACTED STRUCTURED INFORMATION:\n`;
+        
+        for (const [type, items] of Object.entries(structuredInfo)) {
+          if (items.length > 0) {
+            structuredDataContent += `${type.toUpperCase()}: ${items.join(', ')}\n`;
+          }
+        }
+        
+        structuredDataContent += `\nORIGINAL CONTENT:\n${data.content}`;
+        
+        // Update the current page data with enriched content
+        const currentPageIndex = scrapedData.findIndex(item => item.url === url);
+        if (currentPageIndex !== -1) {
+          scrapedData[currentPageIndex].content = structuredDataContent;
+        }
+        
+        // Log what we found
+        for (const [type, items] of Object.entries(structuredInfo)) {
+          if (items.length > 0) {
+            console.log(`Found ${items.length} ${type} on page`);
+          }
+        }
+      }
+      
+      // Extract links from the page
+      const links = extractLinks(url, html);
+      const startUrlObj = new URL(startUrl);
+      
+      // Filter new links: same domain and not visited
+      for (const link of links) {
+        try {
+          const linkObj = new URL(link);
+          
+          // Only add links from the same domain that we haven't queued yet
+          if (linkObj.hostname === startUrlObj.hostname && 
+              !visited.has(link) && 
+              !globalQueue.includes(link)) {
+            globalQueue.push(link);
+          }
+        } catch (e) {
+          // Skip invalid URLs
+          continue;
+        }
+      }
+      
+      console.log(`Added ${links.length} new links to the global queue`);
+    } catch (error) {
+      console.error(`Error processing ${url}:`, error);
+    }
+  }
+}
+
+/**
+ * Executes the main task
+ */
+async function executeTask() {
+  try {
+    console.log('Starting the SoftoAI web scraping task...');
+    
+    // Fetch questions from the endpoint
+    const questionsData = await fetchSoftoData();
+    console.log('Questions received:', JSON.stringify(questionsData, null, 2));
+    
+    // Format questions for processing
+    const questions: Question[] = Object.entries(questionsData).map(([id, question]) => ({
+      id,
+      question
+    }));
+    
+    console.log(`Processing ${questions.length} questions:`);
+    questions.forEach(q => console.log(`- ${q.id}: ${q.question}`));
+    
+    // Crawl the website to find answers
+    const startUrl = 'https://softo.ag3nts.org';
+    console.log(`Starting web crawl from: ${startUrl}`);
+    const answers = await crawlWebsite(startUrl, questions, 20);
+    
+    console.log('Found answers:');
+    Object.entries(answers).forEach(([id, answer]) => {
+      console.log(`- ${id}: ${answer}`);
+    });
+    
+    // Submit the answers
+    console.log('Submitting answers to the API...');
+    await sendReport('softo', answers);
+    console.log('Answers submitted successfully!');
+    
+    return answers;
+  } catch (error) {
+    console.error('Task execution failed:', error);
+    throw error;
+  }
+}
+
+// Run the task
+executeTask()
+  .then(() => console.log('Task completed successfully'))
+  .catch(error => console.error('Task failed:', error));

@@ -148,6 +148,51 @@ export class OpenAIService {
   }
 
   /**
+   * Generates a chat completion response using a messages array
+   */
+  async getChatResponseWithMessages(messages: ChatCompletionMessageParam[], model: string = this.defaultChatModel): Promise<string> {
+    // Log the messages
+    console.log('\n=== OPENAI MESSAGES ===');
+    console.log(`Model: ${model}`);
+    console.log('Messages:');
+    console.log(JSON.stringify(messages, null, 2));
+    
+    return this.withTracing(
+      {
+        id: `chat-messages-${Date.now()}`,
+        name: 'Chat Completion With Messages',
+        sessionId: 'default'
+      },
+      { messages, model },
+      async () => {
+        const response = await this.openai.chat.completions.create({
+          model,
+          messages
+        });
+
+        const responseText = response.choices[0]?.message?.content || '';
+        
+        // Log the response
+        console.log('\n=== OPENAI RESPONSE ===');
+        console.log(responseText);
+        if (response.usage) {
+          console.log(`\nTokens: ${response.usage.prompt_tokens} prompt + ${response.usage.completion_tokens} completion = ${response.usage.total_tokens} total`);
+        }
+        console.log('======================\n');
+        
+        return {
+          response: responseText,
+          usage: response.usage ? {
+            promptTokens: response.usage.prompt_tokens,
+            completionTokens: response.usage.completion_tokens,
+            totalTokens: response.usage.total_tokens
+          } : undefined
+        };
+      }
+    ).then(result => result.response);
+  }
+
+  /**
    * Generates an image using DALL-E 3
    */
   async generateImage(description: string): Promise<string> {

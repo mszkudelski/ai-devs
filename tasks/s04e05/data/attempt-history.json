@@ -1,0 +1,578 @@
+{
+  "attempts": [
+    {
+      "answers": {},
+      "attempt": 4,
+      "timestamp": "2025-06-30T12:05:05.023Z",
+      "success": false,
+      "hints": "Message: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: las",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: las"
+      }
+    },
+    {
+      "answers": {},
+      "attempt": 8,
+      "timestamp": "2025-06-30T12:06:56.768Z",
+      "success": false,
+      "hints": "Message: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: Sigla",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: Sigla"
+      }
+    },
+    {
+      "answers": {},
+      "attempt": 9,
+      "timestamp": "2025-06-30T12:07:25.697Z",
+      "success": false,
+      "hints": "Message: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: Siglum",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: Siglum"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "FLG",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 14,
+      "timestamp": "2025-06-30T12:16:22.161Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: FLG",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: FLG"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "pętla",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 18,
+      "timestamp": "2025-06-30T12:21:32.199Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: pętla",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: pętla"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "siglum",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 19,
+      "timestamp": "2025-06-30T12:21:52.478Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: siglum",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: siglum"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "sigla",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 20,
+      "timestamp": "2025-06-30T12:22:18.111Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: sigla",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: sigla"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "kwadrat",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 21,
+      "timestamp": "2025-06-30T12:24:27.298Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: kwadrat",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: kwadrat"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "Siglum",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 22,
+      "timestamp": "2025-06-30T12:25:04.620Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: Siglum",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: Siglum"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "{{FLG: }}",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 23,
+      "timestamp": "2025-06-30T12:27:33.275Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: {{FLG: }}",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: {{FLG: }}"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "figura",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 24,
+      "timestamp": "2025-06-30T12:28:03.176Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: figura",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: figura"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "białe ślady na śniegu",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 25,
+      "timestamp": "2025-06-30T12:32:29.700Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: białe ślady na śniegu",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: białe ślady na śniegu"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "O",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 26,
+      "timestamp": "2025-06-30T12:41:33.545Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: O",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: O"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "S",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 27,
+      "timestamp": "2025-06-30T12:42:10.058Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: S",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: S"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "flag",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 28,
+      "timestamp": "2025-06-30T12:42:44.172Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: flag",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: flag"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "Q",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 29,
+      "timestamp": "2025-06-30T12:58:47.267Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: Q",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: Q"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "SQ",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 30,
+      "timestamp": "2025-06-30T12:59:24.819Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: SQ",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: SQ"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "START",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 31,
+      "timestamp": "2025-06-30T12:59:58.805Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: START",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: START"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "square",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 32,
+      "timestamp": "2025-06-30T13:01:31.097Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: square",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: square"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "X",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 33,
+      "timestamp": "2025-06-30T13:02:13.744Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: X",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: X"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "FLAG",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 34,
+      "timestamp": "2025-06-30T13:02:43.441Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: FLAG",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: FLAG"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "grota",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 35,
+      "timestamp": "2025-06-30T13:05:22.972Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 04 is incorrect\nHint: Rafał odwołuje się względnie do tej daty i nie wymienia jej dosłownie w tekście\nDebug: You sent: 2024-11-11",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 04 is incorrect",
+        "hint": "Rafał odwołuje się względnie do tej daty i nie wymienia jej dosłownie w tekście",
+        "debug": "You sent: 2024-11-11"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "jamka",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 36,
+      "timestamp": "2025-06-30T13:05:52.353Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: jamka",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: jamka"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "jaskinia",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 37,
+      "timestamp": "2025-06-30T13:06:10.842Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 04 is incorrect\nHint: Rafał odwołuje się względnie do tej daty i nie wymienia jej dosłownie w tekście\nDebug: You sent: 2024-11-11",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 04 is incorrect",
+        "hint": "Rafał odwołuje się względnie do tej daty i nie wymienia jej dosłownie w tekście",
+        "debug": "You sent: 2024-11-11"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "META",
+        "04": "2024-11-12",
+        "05": "Lubawa"
+      },
+      "attempt": 38,
+      "timestamp": "2025-06-30T13:32:38.591Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: META",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: META"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "punkt",
+        "04": "2024-11-12",
+        "05": "Lubawa"
+      },
+      "attempt": 39,
+      "timestamp": "2025-06-30T13:32:59.719Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: punkt",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: punkt"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "pole",
+        "04": "2024-11-12",
+        "05": "Lubawa"
+      },
+      "attempt": 40,
+      "timestamp": "2025-06-30T13:33:37.546Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: pole",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: pole"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "lacuna",
+        "04": "2024-11-11",
+        "05": "Lubawa"
+      },
+      "attempt": 41,
+      "timestamp": "2025-06-30T13:34:41.300Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: lacuna",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: lacuna"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "STOP",
+        "04": "2024-11-12",
+        "05": "Lubawa"
+      },
+      "attempt": 42,
+      "timestamp": "2025-06-30T13:35:24.709Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: STOP",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: STOP"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "schron",
+        "04": "2024-11-12",
+        "05": "Lubawa"
+      },
+      "attempt": 43,
+      "timestamp": "2025-06-30T13:36:00.993Z",
+      "success": false,
+      "hints": "Submission error: Bad Request: The request was invalid\nMessage: Answer for question 03 is incorrect\nHint: możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)\nDebug: You sent: schron",
+      "response": {
+        "code": -340,
+        "message": "Answer for question 03 is incorrect",
+        "hint": "możesz uwzględnić opis tego miejsca, jego szkic, czy tajemnicze namiary koło szkicu (to jest Sigla/Siglum. LLM to wie)",
+        "debug": "You sent: schron"
+      }
+    },
+    {
+      "answers": {
+        "01": "2019",
+        "02": "Adam",
+        "03": "grota",
+        "04": "2024-11-12",
+        "05": "Lubawa"
+      },
+      "attempt": 44,
+      "timestamp": "2025-07-01T11:38:50.854Z",
+      "success": true,
+      "response": {
+        "code": 0,
+        "message": "{{FLG:DEATHNOTE}}"
+      }
+    }
+  ],
+  "totalAttempts": 44,
+  "confirmedCorrectAnswers": {
+    "01": "2019",
+    "02": "Adam",
+    "03": "grota"
+  }
+}

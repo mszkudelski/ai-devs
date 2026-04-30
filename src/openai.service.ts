@@ -3,6 +3,7 @@ import type { ChatCompletionMessageParam } from "openai/resources/chat/completio
 import fs from 'fs/promises';
 import path from 'path';
 import { LangfuseService } from './langfuse.js';
+import { logger } from './services/logging.service.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -101,11 +102,8 @@ export class OpenAIService {
    * Generates a chat completion response
    */
   async getChatResponse(prompt: string, model: string = this.defaultChatModel): Promise<string> {
-    // Log the prompt
-    console.log('\n=== OPENAI PROMPT ===');
-    console.log(`Model: ${model}`);
-    console.log('Prompt:');
-    console.log(prompt);
+    // Log the prompt to file
+    await logger.logPrompt('openai', model, prompt);
     
     return this.withTracing(
       {
@@ -127,13 +125,14 @@ export class OpenAIService {
 
         const responseText = response.choices[0]?.message?.content || '';
         
-        // Log the response
-        console.log('\n=== OPENAI RESPONSE ===');
-        console.log(responseText);
-        if (response.usage) {
-          console.log(`\nTokens: ${response.usage.prompt_tokens} prompt + ${response.usage.completion_tokens} completion = ${response.usage.total_tokens} total`);
-        }
-        console.log('======================\n');
+        // Log the response to file
+        const tokens = response.usage ? {
+          prompt: response.usage.prompt_tokens,
+          completion: response.usage.completion_tokens,
+          total: response.usage.total_tokens
+        } : undefined;
+        
+        await logger.logResponse('openai', responseText, tokens);
         
         return {
           response: responseText,
@@ -151,11 +150,8 @@ export class OpenAIService {
    * Generates a chat completion response using a messages array
    */
   async getChatResponseWithMessages(messages: ChatCompletionMessageParam[], model: string = this.defaultChatModel): Promise<string> {
-    // Log the messages
-    console.log('\n=== OPENAI MESSAGES ===');
-    console.log(`Model: ${model}`);
-    console.log('Messages:');
-    console.log(JSON.stringify(messages, null, 2));
+    // Log the messages to file
+    await logger.logPrompt('openai', model, JSON.stringify(messages, null, 2));
     
     return this.withTracing(
       {
@@ -172,13 +168,14 @@ export class OpenAIService {
 
         const responseText = response.choices[0]?.message?.content || '';
         
-        // Log the response
-        console.log('\n=== OPENAI RESPONSE ===');
-        console.log(responseText);
-        if (response.usage) {
-          console.log(`\nTokens: ${response.usage.prompt_tokens} prompt + ${response.usage.completion_tokens} completion = ${response.usage.total_tokens} total`);
-        }
-        console.log('======================\n');
+        // Log the response to file
+        const tokens = response.usage ? {
+          prompt: response.usage.prompt_tokens,
+          completion: response.usage.completion_tokens,
+          total: response.usage.total_tokens
+        } : undefined;
+        
+        await logger.logResponse('openai', responseText, tokens);
         
         return {
           response: responseText,
